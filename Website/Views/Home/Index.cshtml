@@ -1,0 +1,64 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Automated Testing Demo";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body ng-app="AutomatedTestingApp">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink((string)ViewBag.Title, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content" ng-controller="ClientsController">
+
+        <div class="jumbotron">
+            <h1 class="pull-left">Client Accounts</h1>
+            <span>for</span>
+            <select class="input-lg" ng-model="client" ng-options="c.Name for c in clients"></select>
+        </div>
+        <div class="row" ng-controller="AccountsController as clientAccounts">
+            
+
+            <div class="col-md-4" ng-repeat="account in accounts">
+                <h2>{{account.Name}}</h2>
+                <p><strong>Balance: </strong> {{account.Balance | currency}}</p>
+            </div>
+            
+            
+        </div>
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/angularjs")
+    <script src="~/app/app.js"></script>
+    <script src="~/app/services/AccountsService.js"></script>
+    <script src="~/app/services/ClientsService.js"></script>
+    <script src="~/app/controllers/AccountsController.js"></script>
+    <script src="~/app/controllers/ClientsController.js"></script>
+</body>
+</html>

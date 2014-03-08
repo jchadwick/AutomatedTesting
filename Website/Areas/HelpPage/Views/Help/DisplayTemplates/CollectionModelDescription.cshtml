@@ -1,0 +1,7 @@
+@using AutomatedTesting.Website.Areas.HelpPage.ModelDescriptions
+@using Website.Areas.HelpPage.ModelDescriptions
+@model AutomatedTesting.Website.Areas.HelpPage.ModelDescriptions.CollectionModelDescription
+@if (Model.ElementDescription is ComplexTypeModelDescription)
+{
+    @Html.DisplayFor(m => m.ElementDescription)
+}
