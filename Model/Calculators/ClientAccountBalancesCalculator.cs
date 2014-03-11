@@ -7,7 +7,7 @@ namespace AutomatedTesting.Calculators
     {
         public virtual decimal CalculateTotalBalance(IEnumerable<Account> accounts)
         {
-            return accounts.Sum(x => x.Balance);
+            return accounts.Where(x => x != null).Sum(x => x.Balance);
         } 
     }
 }
