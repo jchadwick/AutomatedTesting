@@ -6,6 +6,7 @@ module AutomatedTesting {
     interface AccountsViewModel extends ng.IScope {
         accounts: Account[];
         client: Client;
+        totalBalance: number;
     }
 
     class AccountsController {
@@ -35,6 +36,12 @@ module AutomatedTesting {
                         .then(accounts => {
                             $log.debug('got accounts', accounts);
                             angular.copy(accounts, $scope.accounts);
+                        });
+
+                    accountsService.getClientTotalAccountBalance($scope.client.Id)
+                        .then(totalBalance=> {
+                            $log.debug('got total balance', totalBalance);
+                            $scope.totalBalance = totalBalance;
                         });
                 }
 

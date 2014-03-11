@@ -5,6 +5,7 @@ module AutomatedTesting {
 
     export interface IAccountsService {
         getClientAccounts(clientId: number): ng.IPromise<Account[]>;
+        getClientTotalAccountBalance(clientId: number): ng.IPromise<number>;
     }
 
     class AccountsService {
@@ -27,6 +28,13 @@ module AutomatedTesting {
             this.$log.debug('Retrieving accounts for client ' + clientId);
 
             return this.$http.get([this.baseUrl, 'clients', clientId, 'accounts'].join('/'))
+                .then(resp => resp.data);
+        }
+
+        getClientTotalAccountBalance(clientId: number): ng.IPromise<number> {
+            this.$log.debug('Retrieving total balance for client ' + clientId);
+
+            return this.$http.get([this.baseUrl, 'clients', clientId, 'accounts', 'balance'].join('/'))
                 .then(resp => resp.data);
         }
 

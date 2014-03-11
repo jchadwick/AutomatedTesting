@@ -33,10 +33,20 @@
 
         <div class="jumbotron">
             <h1 class="pull-left">Client Accounts</h1>
-            <span>for</span>
-            <select class="input-lg" ng-model="client" ng-options="c.Name for c in clients"></select>
+            <div class="clearfix"></div>
+            <div>
+                <span>for</span>
+                <select class="input-lg" ng-model="client" ng-options="c.Name for c in clients"></select>
+            </div>
         </div>
-        <div class="row" ng-controller="AccountsController as clientAccounts">
+        <div class="row ng-cloak" ng-controller="AccountsController as clientAccounts">
+            
+            <div class="col-md-12 accounts-summary">
+                <span ng-show="client">
+                    <label>Total Balance: </label>
+                    <span class="total-balance" ng-bind="totalBalance | currency"></span>
+                </span>
+            </div>
             
 
             <div class="col-md-4" ng-repeat="account in accounts">

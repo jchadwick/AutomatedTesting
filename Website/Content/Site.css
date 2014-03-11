@@ -15,3 +15,11 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.ng-cloak {
+    display: none;
+}
+
+.accounts-summary {
+    font-size: 120%;
+}
