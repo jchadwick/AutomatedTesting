@@ -12,6 +12,7 @@ namespace AutomatedTesting.WebServices
     public class AccountsService : IAccountsService
     {
         private readonly IRepository _repository;
+        private readonly ClientAccountBalancesCalculator _calculator;
 
         // Default constructor required for default WCF service factory
         // (Or you can use a WCF service factory that understands dependency injection!)
@@ -20,9 +21,11 @@ namespace AutomatedTesting.WebServices
         {
         }
 
-        public AccountsService(IRepository repository)
+        public AccountsService(IRepository repository,
+            ClientAccountBalancesCalculator clientAccountBalancesCalculator = null)
         {
             _repository = repository;
+            _calculator = clientAccountBalancesCalculator ?? new ClientAccountBalancesCalculator();
         }
 
 
@@ -30,14 +33,14 @@ namespace AutomatedTesting.WebServices
         {
             var parsedClientId = long.Parse(clientId);
             var client = _repository.Single<Client>(parsedClientId);
-            
-            if(client == null)
+
+            if (client == null)
                 throw new EntityNotFoundException<Client>(clientId);
 
             var account = Mapper.Map<AutomatedTesting.Account>(request);
-            
+
             client.Accounts.Add(account);
-            
+
             _repository.SaveChanges();
 
             return Mapper.DynamicMap<Account>(account);
@@ -57,8 +60,7 @@ namespace AutomatedTesting.WebServices
             var parsedClientId = long.Parse(clientId);
             var accounts = _repository.Query<AutomatedTesting.Account>(x => x.ClientId == parsedClientId);
 
-            var calculator = new ClientAccountBalancesCalculator();
-            var totalBalance = calculator.CalculateTotalBalance(accounts);
+            var totalBalance = _calculator.CalculateTotalBalance(accounts);
 
             return totalBalance;
         }
@@ -69,7 +71,7 @@ namespace AutomatedTesting.WebServices
 
             var account = _repository.Single<AutomatedTesting.Account>(parsedAccountId);
 
-            if(account == null)
+            if (account == null)
                 throw new EntityNotFoundException<Account>(accountId);
 
             account.Balance = balance;
