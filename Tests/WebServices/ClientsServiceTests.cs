@@ -9,7 +9,15 @@ namespace Tests.WebServices
     [TestClass]
     public class ClientsServiceTests
     {
-        [TestMethod]
+        [ClassInitialize]
+        public static void SetUp(TestContext context)
+        {
+            AppDomain.CurrentDomain.SetData(
+                "DataDirectory",
+                context.TestDeploymentDir);
+        }
+
+        [TestMethod, TestCategory("Integration")]
         public void ShouldGetClientById()
         {
             var newClient = new Client { Name = DateTime.Now.ToLongDateString() };
@@ -28,7 +36,7 @@ namespace Tests.WebServices
             Assert.AreEqual(newClient.Name, client.Name);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Integration")]
         public void ShouldGetAllClients()
         {
             var service = new ClientsService();
