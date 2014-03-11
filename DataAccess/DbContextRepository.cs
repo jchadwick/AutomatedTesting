@@ -13,7 +13,7 @@ namespace AutomatedTesting.DataAccess
         private readonly DbContext _context;
         private readonly bool _isSharedContext;
 
-        public DbContextRepository(DbContext context, bool isSharedContext = true)
+        public DbContextRepository(DbContext context, bool isSharedContext = false)
         {
             Contract.Requires(context != null);
 
@@ -88,6 +88,12 @@ namespace AutomatedTesting.DataAccess
 
             TModel entity = Single(predicate);
             Delete(entity);
+        }
+
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
         }
 
 

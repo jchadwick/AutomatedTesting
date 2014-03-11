@@ -11,17 +11,25 @@ namespace AutomatedTesting.WebServices
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class AccountsService : IAccountsService
     {
-        private readonly ClientAccountsDataContext _db;
+        private readonly IRepository _repository;
 
+        // Default constructor required for default WCF service factory
+        // (Or you can use a WCF service factory that understands dependency injection!)
         public AccountsService()
+            : this(new DbContextRepository(new ClientAccountsDataContext()))
         {
-            _db = new ClientAccountsDataContext();
         }
+
+        public AccountsService(IRepository repository)
+        {
+            _repository = repository;
+        }
+
 
         public Account AddClientAccount(string clientId, Account request)
         {
             var parsedClientId = long.Parse(clientId);
-            var client = _db.Clients.Find(parsedClientId);
+            var client = _repository.Single<Client>(parsedClientId);
             
             if(client == null)
                 throw new EntityNotFoundException<Client>(clientId);
@@ -30,7 +38,7 @@ namespace AutomatedTesting.WebServices
             
             client.Accounts.Add(account);
             
-            _db.SaveChanges();
+            _repository.SaveChanges();
 
             return Mapper.DynamicMap<Account>(account);
         }
@@ -38,7 +46,7 @@ namespace AutomatedTesting.WebServices
         public Account[] GetClientAccounts(string clientId)
         {
             var parsedClientId = long.Parse(clientId);
-            var accounts = _db.Accounts.Where(x => x.ClientId == parsedClientId);
+            var accounts = _repository.Query<AutomatedTesting.Account>(x => x.ClientId == parsedClientId);
 
             var mapped = Mapper.Map<Account[]>(accounts);
             return mapped.ToArray();
@@ -47,7 +55,7 @@ namespace AutomatedTesting.WebServices
         public decimal GetClientTotalAccountBalance(string clientId)
         {
             var parsedClientId = long.Parse(clientId);
-            var accounts = _db.Accounts.Where(x => x.ClientId == parsedClientId);
+            var accounts = _repository.Query<AutomatedTesting.Account>(x => x.ClientId == parsedClientId);
 
             var calculator = new ClientAccountBalancesCalculator();
             var totalBalance = calculator.CalculateTotalBalance(accounts);
@@ -60,16 +68,19 @@ namespace AutomatedTesting.WebServices
             var parsedAccountId = long.Parse(accountId);
             var parsedClientId = long.Parse(clientId);
 
-            var account = _db.Accounts.SingleOrDefault(x => 
-                   x.ClientId == parsedClientId 
-                && x.Id == parsedAccountId);
+            var account = 
+                _repository
+                    .Query<AutomatedTesting.Account>(x => 
+                           x.ClientId == parsedClientId 
+                        && x.Id == parsedAccountId)
+                    .SingleOrDefault();
 
             if(account == null)
                 throw new EntityNotFoundException<Account>(accountId);
 
             account.Balance = balance;
 
-            _db.SaveChanges();
+            _repository.SaveChanges();
         }
 
 

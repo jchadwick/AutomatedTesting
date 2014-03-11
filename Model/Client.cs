@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace AutomatedTesting
 {
-    public class Client
+    public class Client : IEntity
     {
         public long Id { get; set; }
         public string Name { get; set; }

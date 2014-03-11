@@ -16,6 +16,8 @@ namespace AutomatedTesting.DataAccess
         void Delete<TModel>(TModel instance) where TModel : class, IEntity;
         void Delete<TModel>(Expression<Func<TModel, bool>> predicate) where TModel : class, IEntity;
 
+        void SaveChanges();
+
         TModel Single<TModel>(object key) where TModel : class, IEntity;
         TModel Single<TModel>(Expression<Func<TModel, bool>> predicate, params string[] includePaths) where TModel : class, IEntity;
 
