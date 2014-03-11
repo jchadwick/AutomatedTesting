@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Automated Testing Demo</title>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/Site.css" rel="stylesheet" />
+</head>
+<body ng-app="AutomatedTestingApp">
+    <div class="container body-content" ng-controller="ClientsController">
+
+        <div class="jumbotron">
+            <h1 class="pull-left">Client Accounts</h1>
+            <div class="clearfix"></div>
+            <div>
+                <span>for</span>
+                <select class="input-lg" ng-model="client" ng-options="c.Name for c in clients"></select>
+            </div>
+        </div>
+        <div class="row ng-cloak" ng-controller="AccountsController as clientAccounts">
+
+            <div class="col-md-12 accounts-summary">
+                <span ng-show="client">
+                    <label>Total Balance: </label>
+                    <span class="total-balance" ng-bind="totalBalance | currency"></span>
+                </span>
+            </div>
+
+
+            <div class="col-md-4" ng-repeat="account in accounts">
+                <h2>{{account.Name}}</h2>
+                <p><strong>Balance: </strong> {{account.Balance | currency}}</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/angular.js"></script>
+    <script src="Scripts/angular-route.js"></script>
+    <script src="Scripts/angular-animate.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/services/AccountsService.js"></script>
+    <script src="app/services/ClientsService.js"></script>
+    <script src="app/controllers/AccountsController.js"></script>
+    <script src="app/controllers/ClientsController.js"></script>
+</body>
+</html>
