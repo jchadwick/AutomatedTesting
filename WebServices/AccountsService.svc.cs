@@ -66,14 +66,8 @@ namespace AutomatedTesting.WebServices
         public void UpdateClientAccountBalance(string clientId, string accountId, decimal balance)
         {
             var parsedAccountId = long.Parse(accountId);
-            var parsedClientId = long.Parse(clientId);
 
-            var account = 
-                _repository
-                    .Query<AutomatedTesting.Account>(x => 
-                           x.ClientId == parsedClientId 
-                        && x.Id == parsedAccountId)
-                    .SingleOrDefault();
+            var account = _repository.Single<AutomatedTesting.Account>(parsedAccountId);
 
             if(account == null)
                 throw new EntityNotFoundException<Account>(accountId);
