@@ -15,10 +15,12 @@ namespace Tests.Website
     public class ClientAccountsPageTests
     {
         private static IWebDriver _driver;
+        private static TestContext _context;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
+            _context = context;
             _driver = new ChromeDriver(new ChromeOptions { LeaveBrowserRunning = false });
         }
 
@@ -31,13 +33,13 @@ namespace Tests.Website
         [TestCleanup]
         public void TestCleanup()
         {
-            var tempDir = @"C:\Temp\Screenshots\";
+            if (_context.CurrentTestOutcome == UnitTestOutcome.Passed)
+                return;
 
-            if (!Directory.Exists(tempDir))
-                Directory.CreateDirectory(tempDir);
+            var filename = string.Format("{0} FAILED.png", _context.TestName);
+            var filepath = Path.Combine(_context.TestRunResultsDirectory, "screenshots", filename);
 
-            var fileName = tempDir + DateTime.Now.ToString("yyyyMMdd_hhmmsstt") + ".png";
-            _driver.TakeScreenshot().SaveAsFile(fileName, ImageFormat.Png);
+            _driver.TakeScreenshot().SaveAsFile(filepath, ImageFormat.Png);
         }
 
         [TestMethod]
