@@ -354,6 +354,7 @@
     <Content Include="Scripts\version.json" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="app\controllers\ClientsController.spec.ts" />
     <TypeScriptCompile Include="app\controllers\ClientsController.ts" />
     <TypeScriptCompile Include="app\controllers\AccountsController.ts" />
     <TypeScriptCompile Include="app\model.ts" />

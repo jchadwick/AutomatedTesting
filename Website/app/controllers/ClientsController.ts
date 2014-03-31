@@ -3,7 +3,7 @@
 module AutomatedTesting {
     'use strict';
 
-    interface ClientsViewModel extends ng.IScope {
+    export interface ClientsViewModel extends ng.IScope {
         clients: Client[];
     }
 
